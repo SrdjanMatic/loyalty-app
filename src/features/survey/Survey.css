@@ -1,0 +1,89 @@
+.survey-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.survey-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  width: 100%;
+}
+
+.survey-options-columns {
+  display: flex;
+  gap: 2rem;
+}
+
+.survey-column {
+  flex: 1;
+}
+
+.survey-option {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.survey-matrix table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.survey-matrix th,
+.survey-matrix td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.survey-button {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.survey-button:hover {
+  background-color: #0056b3;
+}
+
+/* .survey-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+} */
+
+/* Align Next button to the right on Step 1 */
+.survey-buttons-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+/* Already existing survey-buttons class (for Step 2) keeps buttons spaced */
+.survey-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.survey-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
