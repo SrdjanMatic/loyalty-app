@@ -17,8 +17,11 @@ export const userLoyaltyApi = createApi({
   baseQuery: customBaseQuery,
   tagTypes: [QUERY_TAGS.USER_LOYALTY],
   endpoints: (builder) => ({
-    getUserLoyalty: builder.query<UserLoyalty, number | undefined>({
-      query: (restaurantId) => `/user-loyalty/${restaurantId}`,
+    getUserLoyalty: builder.query<UserLoyalty, number>({
+      query: (restaurantId) => ({
+        url: `/user-loyalty`,
+        params: { restaurantId },
+      }),
       providesTags: [QUERY_TAGS.USER_LOYALTY],
     }),
     createUserLoyalty: builder.mutation<UserLoyalty, number>({
@@ -31,8 +34,9 @@ export const userLoyaltyApi = createApi({
     }),
     promoteUserLoyalty: builder.mutation<UserLoyalty, number>({
       query: (restaurantId) => ({
-        url: `/user-loyalty/promote-user/${restaurantId}`,
+        url: `/user-loyalty/promote-user`,
         method: "POST",
+        params: { restaurantId },
       }),
       invalidatesTags: [QUERY_TAGS.USER_LOYALTY],
     }),

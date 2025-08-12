@@ -1,6 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import restaurantsReducer from "../reducer/restaurantsSlice.ts";
-import userLoyaltyReducer from "../reducer/userLoyaltySlice.ts";
 import { vipRestaurantsApi } from "../reducer/vipRestaurantsApi.ts";
 import { couponsApi } from "../reducer/couponsApi.ts";
 import { receiptsApi } from "../reducer/receiptsApi.ts";
@@ -11,14 +9,12 @@ import { userLoyaltyApi } from "../reducer/userLoyaltyApi.ts";
 
 export const store = configureStore({
   reducer: {
-    // restaurants: restaurantsReducer,
     [restaurantsApi.reducerPath]: restaurantsApi.reducer,
     [receiptsApi.reducerPath]: receiptsApi.reducer,
     [couponsApi.reducerPath]: couponsApi.reducer,
     [vipRestaurantsApi.reducerPath]: vipRestaurantsApi.reducer,
     [userPreferencesApi.reducerPath]: userPreferencesApi.reducer,
     [notificationsApi.reducerPath]: notificationsApi.reducer,
-    // userLoyalty: userLoyaltyReducer,
     [userLoyaltyApi.reducerPath]: userLoyaltyApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

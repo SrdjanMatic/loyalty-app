@@ -20,8 +20,11 @@ export const receiptsApi = createApi({
   baseQuery: customBaseQuery,
   tagTypes: [QUERY_TAGS.RECEIPTS],
   endpoints: (builder) => ({
-    getReceipts: builder.query<Receipt[], number | undefined>({
-      query: (restaurantId) => `/receipt/${restaurantId}`,
+    getReceipts: builder.query<Receipt[], number>({
+      query: (restaurantId) => ({
+        url: `/receipt`,
+        params: { restaurantId },
+      }),
       providesTags: [QUERY_TAGS.RECEIPTS],
     }),
     addGamePoints: builder.mutation<any, GameDTO>({

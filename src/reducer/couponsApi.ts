@@ -14,8 +14,11 @@ export const couponsApi = createApi({
   baseQuery: customBaseQuery,
   tagTypes: [QUERY_TAGS.COUPONS],
   endpoints: (builder) => ({
-    getCoupons: builder.query<Coupon[], number | undefined>({
-      query: (restaurantId) => `/coupons/user/${restaurantId}`,
+    getCoupons: builder.query<Coupon[], number>({
+      query: (restaurantId) => ({
+        url: `/coupons/user`,
+        params: { restaurantId },
+      }),
       providesTags: [QUERY_TAGS.COUPONS],
     }),
   }),

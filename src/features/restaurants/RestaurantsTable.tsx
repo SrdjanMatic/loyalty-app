@@ -24,16 +24,12 @@ const cardStyle: React.CSSProperties = {
 
 const RestaurantsTable: React.FC = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState<any>(null);
-  const [selectedRestaurantId, setSelectedRestaurantId] = useState<
-    number | undefined
-  >(undefined);
+
   const navigate = useNavigate();
   const { keycloak } = useKeycloak();
   const hasVipCard = keycloak?.tokenParsed?.vipCard === "true";
 
-  // RTK Query hooks
-  const { data: items = [], status: restaurantsStatus } =
-    useGetRestaurantsQuery();
+  const { data: items = [] } = useGetRestaurantsQuery();
   const { data: restaurantsUserLoyalty = [], refetch: refetchUserLoyalty } =
     useGetRestaurantsWithUserLoyaltyQuery();
   const { data: unseenCount = 0, refetch: refetchUnseenCount } =
@@ -43,10 +39,8 @@ const RestaurantsTable: React.FC = () => {
     refetchUnseenCount();
   }, []);
 
-  // RTK Query mutation for joining loyalty
   const [createUserLoyalty] = useCreateUserLoyaltyMutation();
 
-  // Only show active restaurants in the list
   const activeRestaurants = restaurantsUserLoyalty.filter((r: any) => r.active);
 
   const activeRestaurantIds = restaurantsUserLoyalty
@@ -84,7 +78,6 @@ const RestaurantsTable: React.FC = () => {
           selected={selectedRestaurant}
           onChange={async (r) => {
             setSelectedRestaurant(r);
-            setSelectedRestaurantId(r.id);
             try {
               await createUserLoyalty(r.id).unwrap();
               refetchUserLoyalty();

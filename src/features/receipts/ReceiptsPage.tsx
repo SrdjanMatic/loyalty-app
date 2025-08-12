@@ -35,22 +35,16 @@ const darkColor = "#222";
 const accentColor = "#fff";
 
 const ReceiptsPage: React.FC = () => {
-  const { restaurantId } = useParams();
-  const restaurantIdNumber = restaurantId ? Number(restaurantId) : undefined;
+  const { restaurantId } = useParams<{ restaurantId: string }>();
+  const restaurantIdNumber = Number(restaurantId);
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    data: receipts = [],
-    status,
-    error,
-    refetch: refetchReceipts,
-  } = useGetReceiptsQuery(Number(restaurantId));
-  const { data: coupons = [], refetch: refetchCoupons } = useGetCouponsQuery(
-    Number(restaurantId)
-  );
+  const { data: receipts = [], refetch: refetchReceipts } =
+    useGetReceiptsQuery(restaurantIdNumber);
+  const { data: coupons = [], refetch: refetchCoupons } =
+    useGetCouponsQuery(restaurantIdNumber);
   const { data: userLoyalty, refetch: refetchUserLoyalty } =
     useGetUserLoyaltyQuery(restaurantIdNumber);
   const [addGamePoints] = useAddGamePointsMutation();
-
   const {
     data: restaurantChallenges = [],
     refetch: refetchRestaurantChallenges,

@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { customBaseQuery } from "./customBaseQuery.ts";
 import { QUERY_TAGS } from "./tagConstants.ts";
-import type { Restaurant } from "./restaurantsSlice";
+import { Restaurant } from "./restaurantsApi.ts";
 
 // Notification model matching your DB structure
 export interface Notification {

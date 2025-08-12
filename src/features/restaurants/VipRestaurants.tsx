@@ -12,11 +12,7 @@ const accentColor = "#fff";
 const VipRestaurants: React.FC = () => {
   const [showVipCard, setShowVipCard] = useState(false);
 
-  const {
-    data: vipRestaurants = [],
-    status,
-    error,
-  } = useGetVipRestaurantsQuery();
+  const { data: vipRestaurants = [] } = useGetVipRestaurantsQuery();
 
   const user = {
     firstName: "John",
