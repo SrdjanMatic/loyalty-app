@@ -2,7 +2,7 @@ import axios from "axios";
 import { keycloak } from "../keycloak/keycloak.ts";
 
 const api = axios.create({
-  baseURL: "http://localhost:8082/api",
+  baseURL: process.env.REACT_APP_API_BASE_URL,
 });
 
 api.interceptors.request.use(async (config) => {

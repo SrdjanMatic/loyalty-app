@@ -10,6 +10,7 @@ import {
   useGetRestaurantsWithUserLoyaltyQuery,
 } from "../../reducer/restaurantsApi.ts";
 import { useCreateUserLoyaltyMutation } from "../../reducer/userLoyaltyApi.ts";
+import { useTranslation } from "react-i18next"; // <-- Add this
 
 const cardStyle: React.CSSProperties = {
   background: "#fff",
@@ -24,6 +25,7 @@ const cardStyle: React.CSSProperties = {
 
 const RestaurantsTable: React.FC = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState<any>(null);
+  const { t } = useTranslation(); // <-- Add this
 
   const navigate = useNavigate();
   const { keycloak } = useKeycloak();
@@ -67,7 +69,7 @@ const RestaurantsTable: React.FC = () => {
   return (
     <div style={{ padding: 16, maxWidth: 480, margin: "0 auto" }}>
       <Header
-        title="Restaurants"
+        title={t("Restaurants")}
         numberOfUnseenNotifications={unseenCount}
         hasVipCard={hasVipCard}
         showBackArrow={false}
@@ -122,7 +124,7 @@ const RestaurantsTable: React.FC = () => {
               boxShadow: "0 1px 4px rgba(0,0,0,0.10)",
               zIndex: 2,
             }}
-            title="Napusti lojalnost"
+            title={t("Leave loyalty")}
           >
             <IoClose />
           </div>

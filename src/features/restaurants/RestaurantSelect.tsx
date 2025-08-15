@@ -1,22 +1,29 @@
 import { Listbox } from "@headlessui/react";
 import { HiSelector } from "react-icons/hi";
-import "./RestaurantSelect.css"; // vidi ispod za stilove
+import { useTranslation } from "react-i18next";
+import "./RestaurantSelect.css";
 
-export const RestaurantSelect = ({
-  selected,
-  onChange,
-  items,
-}: {
+interface RestaurantSelectProps {
   selected: any;
   onChange: (value: any) => void;
   items: any[];
+}
+
+export const RestaurantSelect: React.FC<RestaurantSelectProps> = ({
+  selected,
+  onChange,
+  items,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="restaurant-select">
       <Listbox value={selected} onChange={onChange}>
         <div className="listbox-wrapper">
           <Listbox.Button className="listbox-button">
-            <span className="listbox-button-text">{"Izaberi restoran..."}</span>
+            <span className="listbox-button-text">
+              {t("Select restaurant")}
+            </span>
             <span className="listbox-button-icon">
               <HiSelector size={20} />
             </span>

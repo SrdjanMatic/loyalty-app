@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Survey.css";
 import { useNavigate } from "react-router-dom";
 import { useSubmitUserPreferencesMutation } from "../../reducer/userPreferencesApi.ts";
+import { useTranslation } from "react-i18next";
 
 const foodOptions = [
   "Pizza",
@@ -35,6 +36,7 @@ const daysOfWeek = [
 const partsOfDay = ["Breakfast", "Lunch", "Dinner"];
 
 export default function Survey() {
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [foodPreferences, setFoodPreferences] = useState<string[]>([]);
   const [visitPreferences, setVisitPreferences] = useState<string[]>([]);
@@ -74,8 +76,8 @@ export default function Survey() {
       <div className="survey-card">
         {step === 1 && (
           <>
-            <h2>🍽️ Your Favorite Foods & Drinks</h2>
-            <p>Select all that apply:</p>
+            <h2>🍽️ {t("Your Favorite Foods & Drinks")}</h2>
+            <p>{t("Select all that apply:")}</p>
             <div className="survey-options-columns">
               <div className="survey-column">
                 {foodColumn1.map((food) => (
@@ -87,7 +89,7 @@ export default function Survey() {
                         handleToggle(food, foodPreferences, setFoodPreferences)
                       }
                     />
-                    {food}
+                    {t(food)}
                   </label>
                 ))}
               </div>
@@ -101,7 +103,7 @@ export default function Survey() {
                         handleToggle(food, foodPreferences, setFoodPreferences)
                       }
                     />
-                    {food}
+                    {t(food)}
                   </label>
                 ))}
               </div>
@@ -112,7 +114,7 @@ export default function Survey() {
                 onClick={() => setStep(2)}
                 disabled={foodPreferences.length === 0}
               >
-                Next ➡️
+                {t("Next")} ➡️
               </button>
             </div>
           </>
@@ -120,23 +122,23 @@ export default function Survey() {
 
         {step === 2 && (
           <>
-            <h4>Parts of the Day</h4>
-            <h2>📅 Restaurant Visit Times</h2>
-            <p>Select when you usually visit restaurants:</p>
+            <h4>{t("Parts of the Day")}</h4>
+            <h2>📅 {t("Restaurant Visit Times")}</h2>
+            <p>{t("Select when you usually visit restaurants:")}</p>
             <div className="survey-matrix">
               <table>
                 <thead>
                   <tr>
                     <th></th>
                     {partsOfDay.map((time) => (
-                      <th key={time}>{time}</th>
+                      <th key={time}>{t(time)}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {daysOfWeek.map((day) => (
                     <tr key={day}>
-                      <td>{day.slice(0, 3)}</td>
+                      <td>{t(day.slice(0, 3))}</td>
                       {partsOfDay.map((time) => {
                         const id = `${day}-${time}`;
                         const isChecked = visitPreferences.includes(id);
@@ -166,14 +168,14 @@ export default function Survey() {
 
             <div className="survey-buttons">
               <button className="survey-button" onClick={() => setStep(1)}>
-                ⬅️ Back
+                ⬅️ {t("Back")}
               </button>
               <button
                 className="survey-button"
                 onClick={handleSubmit}
                 disabled={visitPreferences.length === 0}
               >
-                Submit ✅
+                {t("Submit")} ✅
               </button>
             </div>
           </>

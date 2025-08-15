@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCoins, FaArrowLeft } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 interface ReceiptsHeaderProps {
   configData: any;
@@ -14,6 +15,7 @@ const ReceiptsHeader: React.FC<ReceiptsHeaderProps> = ({
   showBackArrow = true,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div
@@ -46,7 +48,7 @@ const ReceiptsHeader: React.FC<ReceiptsHeaderProps> = ({
             cursor: "pointer",
             zIndex: 2,
           }}
-          aria-label="Nazad na restorane"
+          aria-label={t("Back to restaurants")}
         >
           <FaArrowLeft
             style={{

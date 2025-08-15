@@ -1,6 +1,7 @@
 import { useKeycloak } from "@react-keycloak/web";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface HeaderProps {
   title: string;
@@ -18,6 +19,8 @@ const Header: React.FC<HeaderProps> = ({
   const { keycloak } = useKeycloak();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const { t, i18n } = useTranslation();
 
   const handleLogout = () => {
     keycloak.logout({
@@ -140,6 +143,20 @@ const Header: React.FC<HeaderProps> = ({
                 zIndex: 10,
               }}
             >
+              <div style={{ marginRight: 12 }}>
+                <select
+                  value={i18n.language}
+                  onChange={(e) => {
+                    i18n.changeLanguage(e.target.value);
+                    localStorage.setItem("i18nextLng", e.target.value);
+                  }}
+                  style={{ fontSize: 14, padding: "2px 8px" }}
+                  aria-label="Change language"
+                >
+                  <option value="en">English</option>
+                  <option value="sr">Srpski</option>
+                </select>
+              </div>
               <button
                 onClick={handleLogout}
                 style={{
@@ -151,7 +168,7 @@ const Header: React.FC<HeaderProps> = ({
                   textAlign: "left",
                 }}
               >
-                Logout
+                {t("Logout")}
               </button>
             </div>
           )}

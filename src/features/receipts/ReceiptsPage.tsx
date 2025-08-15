@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import type { AppDispatch } from "../../store/store.ts";
 import api from "../../keycloak/interceptors.ts";
@@ -7,7 +7,6 @@ import { Scanner } from "@yudiel/react-qr-scanner";
 import { Wheel } from "react-custom-roulette";
 import { FaInfoCircle } from "react-icons/fa";
 import ReceiptsHeader from "./ReceiptsHeader.tsx";
-
 import CelebrationModal from "./CelebrationModal.tsx";
 import { useGetCouponsQuery } from "../../reducer/couponsApi.ts";
 import {
@@ -24,6 +23,7 @@ import {
   useGetRestaurantChallengeQuery,
   useGetRestaurantConfigDataQuery,
 } from "../../reducer/restaurantsApi.ts";
+import { useTranslation } from "react-i18next";
 
 interface WheelAvailablePoints {
   receiptKey: string;
@@ -35,6 +35,7 @@ const darkColor = "#222";
 const accentColor = "#fff";
 
 const ReceiptsPage: React.FC = () => {
+  const { t } = useTranslation();
   const { restaurantId } = useParams<{ restaurantId: string }>();
   const restaurantIdNumber = Number(restaurantId);
   const dispatch = useDispatch<AppDispatch>();
@@ -85,12 +86,11 @@ const ReceiptsPage: React.FC = () => {
     }
   }, [restaurantIdNumber, showWheel, dispatch]);
 
-  // Initialize challengeScales when showWheel opens or restaurantChallenges change
   useEffect(() => {
     if (showWheel && restaurantChallenges) {
       const initial: { [key: number]: number } = {};
       restaurantChallenges.forEach((ch: Challenge, idx: number) => {
-        initial[idx] = ch.visitsCompleted; // default value
+        initial[idx] = ch.visitsCompleted;
       });
       setChallengeScales(initial);
     }
@@ -121,25 +121,13 @@ const ReceiptsPage: React.FC = () => {
   };
 
   const generateWheelData = (wheelDataValues: number[]) => {
-    const wheelData: {
-      option: string;
+    return wheelDataValues.map((val, i) => ({
+      option: val.toString(),
       style: {
-        backgroundColor: string;
-        textColor: string;
-      };
-    }[] = [];
-
-    for (let i = 0; i < wheelDataValues.length; i++) {
-      wheelData.push({
-        option: wheelDataValues[i].toString(),
-        style: {
-          backgroundColor: i % 2 === 0 ? "#fff" : "#bfa16b",
-          textColor: "#222",
-        },
-      });
-    }
-
-    return wheelData;
+        backgroundColor: i % 2 === 0 ? "#fff" : "#bfa16b",
+        textColor: "#222",
+      },
+    }));
   };
 
   const handleStartWheel = () => {
@@ -158,7 +146,6 @@ const ReceiptsPage: React.FC = () => {
         generateWheelData(wheelData.wheelData)[prizeNumber].option
       );
       setMustSpin(false);
-
       setPointsWon(points);
 
       const completedChallenge = restaurantChallenges.find(
@@ -175,14 +162,7 @@ const ReceiptsPage: React.FC = () => {
             challengeId: challengeId,
           }).unwrap();
 
-          // Optionally, refetch receipts and user loyalty if needed
-          // If you use RTK Query for user loyalty, call its refetch method
-          // For receipts, you can use the refetch function from useGetReceiptsQuery:
-          // const { refetch } = useGetReceiptsQuery(Number(restaurantId));
-          // refetch();
-
           if (restaurantId) {
-            //fetch receipts again
             refetchUserLoyalty();
           }
         } catch (error) {
@@ -217,7 +197,6 @@ const ReceiptsPage: React.FC = () => {
     if (restaurantIdNumber) {
       try {
         await promoteUserLoyalty(restaurantIdNumber);
-        // Optionally, you can refetch user loyalty or coupons here if needed
         await refetchUserLoyalty();
         await refetchCoupons();
       } catch (error) {
@@ -387,9 +366,14 @@ const ReceiptsPage: React.FC = () => {
                         fontWeight: 500,
                       }}
                     >
-                      With {getCouponLimit(configData)} tokens you will become{" "}
-                      <b>{getCouponNextLevel()}</b> member of Cross restaurant
-                      and you will unlock additional coupons and benefits.
+                      {t(
+                        "With {{limit}} tokens you will become <1>{{level}}</1> member of Cross restaurant and you will unlock additional coupons and benefits.",
+                        {
+                          limit: getCouponLimit(configData),
+                          level: getCouponNextLevel(),
+                          interpolation: { escapeValue: false },
+                        }
+                      )}
                     </div>
                   )}
                 </div>
@@ -420,7 +404,7 @@ const ReceiptsPage: React.FC = () => {
                 transition: "background 0.2s",
               }}
             >
-              Računi
+              {t("Receipts")}
             </button>
             <button
               onClick={() => setActiveTab("coupons")}
@@ -440,7 +424,7 @@ const ReceiptsPage: React.FC = () => {
                 transition: "background 0.2s",
               }}
             >
-              Kuponi
+              {t("Coupons")}
             </button>
           </div>
 
@@ -458,12 +442,12 @@ const ReceiptsPage: React.FC = () => {
                   letterSpacing: 1,
                 }}
               >
-                Vaši računi
+                {t("Your receipts")}
               </h2>
 
               {receipts.length === 0 && (
                 <div style={{ color: accentColor }}>
-                  Nema pronađenih računa.
+                  {t("No receipts found.")}
                 </div>
               )}
               {receipts.map((receipt: any) => (
@@ -483,10 +467,10 @@ const ReceiptsPage: React.FC = () => {
                   <div
                     style={{ fontWeight: 700, fontSize: 12, marginBottom: 8 }}
                   >
-                    Račun #{receipt.receiptKey}
+                    {t("Receipt #{{key}}", { key: receipt.receiptKey })}
                   </div>
                   <div style={{ fontSize: 15, marginBottom: 4 }}>
-                    <b>Iznos:</b> {receipt.amount} RSD
+                    <b>{t("Amount")}:</b> {receipt.amount} RSD
                   </div>
                   <div
                     style={{
@@ -512,7 +496,7 @@ const ReceiptsPage: React.FC = () => {
                         fontSize: 18,
                         boxShadow: "0 1px 4px rgba(0,0,0,0.10)",
                       }}
-                      title="Broj poena"
+                      title={t("Points")}
                     >
                       {receipt.points ?? 0}
                     </div>
@@ -533,7 +517,7 @@ const ReceiptsPage: React.FC = () => {
                           marginLeft: 4,
                           boxShadow: "0 1px 4px rgba(229,57,53,0.10)",
                         }}
-                        title="Game poeni"
+                        title={t("Game points")}
                       >
                         +{receipt.gamePoints}
                       </div>
@@ -557,10 +541,12 @@ const ReceiptsPage: React.FC = () => {
                   letterSpacing: 1,
                 }}
               >
-                Vaši kuponi
+                {t("Your coupons")}
               </h2>
               {coupons.length === 0 && (
-                <div style={{ color: accentColor }}>Nema dostupnih kupona.</div>
+                <div style={{ color: accentColor }}>
+                  {t("No coupons available.")}
+                </div>
               )}
               {coupons.map((coupon: any) => (
                 <div
@@ -582,7 +568,7 @@ const ReceiptsPage: React.FC = () => {
                     {coupon.name}
                   </div>
                   <div style={{ fontSize: 15, marginBottom: 4 }}>
-                    <b>Potrebno poena:</b> {coupon.points}
+                    <b>{t("Points required")}:</b> {coupon.points}
                   </div>
                 </div>
               ))}
@@ -611,16 +597,7 @@ const ReceiptsPage: React.FC = () => {
               style={{ background: accentColor, padding: 24, borderRadius: 12 }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* <Scanner
-              onScan={handleScan}
-              scanDelay={100}
-              constraints={{
-                facingMode: "environment",
-                width: { ideal: 1920 },
-                height: { ideal: 1080 },
-              }}
-              sound={false}
-            /> */}
+              {/* <Scanner ... /> */}
               <button
                 style={{
                   marginTop: 16,
@@ -636,7 +613,7 @@ const ReceiptsPage: React.FC = () => {
                 }}
                 onClick={() => setShowScanner(false)}
               >
-                Zatvori
+                {t("Close")}
               </button>
             </div>
           </div>
@@ -675,7 +652,9 @@ const ReceiptsPage: React.FC = () => {
                   marginBottom: 16,
                 }}
               >
-                Osvojili ste : {wheelData?.receiptPoints} poena
+                {t("You won: {{points}} points", {
+                  points: wheelData?.receiptPoints,
+                })}
               </h2>
               <h2
                 style={{
@@ -683,7 +662,7 @@ const ReceiptsPage: React.FC = () => {
                   marginBottom: 16,
                 }}
               >
-                Točak sreće
+                {t("Wheel of Fortune")}
               </h2>
               <div
                 style={{
@@ -706,7 +685,7 @@ const ReceiptsPage: React.FC = () => {
                     marginBottom: 18,
                   }}
                 >
-                  Aktiviraj izazove
+                  {t("Activate challenges")}
                 </div>
                 {/* Challenge sliders */}
                 {restaurantChallenges &&
@@ -719,8 +698,10 @@ const ReceiptsPage: React.FC = () => {
                           color: darkColor,
                         }}
                       >
-                        {challenge.period}-dnevni izazov:{" "}
-                        {challenge.visitsRequired} poseta
+                        {t("{{period}}-day challenge: {{visits}} visits", {
+                          period: challenge.period,
+                          visits: challenge.visitsRequired,
+                        })}
                       </div>
                       <div
                         style={{
@@ -775,7 +756,7 @@ const ReceiptsPage: React.FC = () => {
                   }}
                   disabled={true}
                 >
-                  Ostavi recenziju
+                  {t("Leave a review")}
                 </button>
               </div>
               {wheelData && someChallengesReady && (
@@ -813,7 +794,7 @@ const ReceiptsPage: React.FC = () => {
                   onClick={handleStartWheel}
                   disabled={!someChallengesReady}
                 >
-                  Start
+                  {t("Start")}
                 </button>
               )}
               {pointsWon !== null && (
@@ -825,7 +806,10 @@ const ReceiptsPage: React.FC = () => {
                     color: configData?.headerAndButtonColor,
                   }}
                 >
-                  Osvojili ste {pointsWon} poen{pointsWon === 1 ? "" : "a"}!
+                  {t("You won {{points}} point", {
+                    points: pointsWon,
+                  })}
+                  {pointsWon !== 1 ? "s!" : "!"}
                 </div>
               )}
               <button
@@ -842,7 +826,7 @@ const ReceiptsPage: React.FC = () => {
                 }}
                 onClick={() => setShowWheel(false)}
               >
-                Zatvori
+                {t("Close")}
               </button>
             </div>
           </div>
@@ -870,7 +854,7 @@ const ReceiptsPage: React.FC = () => {
           }}
           onClick={() => fakeScanner()}
         >
-          Skeniraj račun
+          {t("Scan receipt")}
         </button>
       </div>
     </div>

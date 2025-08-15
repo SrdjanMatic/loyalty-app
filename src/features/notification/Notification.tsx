@@ -1,10 +1,7 @@
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 import Header from "../../common/Header.tsx";
-import {
-  useGetAllNotificationsByUserQuery,
-  useGetNumberOfUnseenNotificationsQuery,
-} from "../../reducer/notificationsApi.ts";
+import { useGetAllNotificationsByUserQuery } from "../../reducer/notificationsApi.ts";
 
 type NotificationType = {
   id: number;
@@ -50,6 +47,7 @@ const getStyles = (type: NotificationType["type"]) => {
 };
 
 const Notification: React.FC = () => {
+  const { t } = useTranslation();
   const {
     data: notifications = [],
     status,
@@ -72,7 +70,7 @@ const Notification: React.FC = () => {
         gap: 12,
       }}
     >
-      <Header title="Notifications" />
+      <Header title={t("Notifications")} />
       {notifications.map((item, idx) => {
         const styles = getStyles(item.type);
         return (
@@ -96,7 +94,7 @@ const Notification: React.FC = () => {
   url('https://thumbs.dreamstime.com/b/pasta-bechamel-sauce-thyme-mint-white-background-restaurant-menu-pasta-bechamel-sauce-thyme-270806383.jpg')
 `,
               backgroundRepeat: "no-repeat",
-              backgroundSize: "contain", // or try "contain"
+              backgroundSize: "contain",
               backgroundPosition: "center",
             }}
           >
@@ -120,7 +118,7 @@ const Notification: React.FC = () => {
                   color: styles.titleColor,
                 }}
               >
-                {item.title}
+                {t(item.title)}
               </span>
               {item.type === "perfect_match" && (
                 <span
@@ -130,7 +128,7 @@ const Notification: React.FC = () => {
                     color: styles.iconColor,
                     fontWeight: 700,
                   }}
-                  title="Perfect Match"
+                  title={t("Perfect Match")}
                 >
                   ⭐
                 </span>
@@ -140,7 +138,7 @@ const Notification: React.FC = () => {
               {item.description}
             </div>
             <div style={{ fontSize: 12, color: "#888", marginBottom: 12 }}>
-              Važi: {item.validUntil}
+              {t("Valid until")}: {item.validUntil}
             </div>
             <button
               style={{
@@ -157,7 +155,7 @@ const Notification: React.FC = () => {
                 letterSpacing: 1,
               }}
             >
-              Rezerviši
+              {t("Reserve")}
             </button>
           </div>
         );

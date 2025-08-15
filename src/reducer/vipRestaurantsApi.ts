@@ -2,11 +2,18 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { customBaseQuery } from "./customBaseQuery.ts";
 import { QUERY_TAGS } from "./tagConstants.ts";
 
+export interface RestaurantView {
+  id: number;
+  name: string;
+}
+
 export interface VipRestaurant {
   id: number;
-  restaurantId: number;
-  discount: string;
+  restaurantName: string;
+  generalDiscount: number;
   backgroundImage: string;
+  levelDiscount: number;
+  level: string;
 }
 
 export const vipRestaurantsApi = createApi({
@@ -15,7 +22,7 @@ export const vipRestaurantsApi = createApi({
   tagTypes: [QUERY_TAGS.VIP_RESTAURANTS],
   endpoints: (builder) => ({
     getVipRestaurants: builder.query<VipRestaurant[], void>({
-      query: () => "/vip-restaurants",
+      query: () => "/vip-restaurants/user",
       providesTags: [QUERY_TAGS.VIP_RESTAURANTS],
     }),
   }),

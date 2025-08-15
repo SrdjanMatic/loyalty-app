@@ -7,6 +7,7 @@ import VipRestaurants from "./features/restaurants/VipRestaurants.tsx";
 import Survey from "./features/survey/Survey.tsx";
 import HomeRedirect from "./routes/HomeRedirect.tsx";
 import Notification from "./features/notification/Notification.tsx";
+import "./i18n.ts";
 
 const App: React.FC = () => {
   const { keycloak, initialized } = useKeycloak();

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import QRCode from "react-qr-code";
+import { useTranslation } from "react-i18next";
 
 import {
   useGetVipRestaurantsQuery,
@@ -11,6 +12,7 @@ const accentColor = "#fff";
 
 const VipRestaurants: React.FC = () => {
   const [showVipCard, setShowVipCard] = useState(false);
+  const { t } = useTranslation();
 
   const { data: vipRestaurants = [] } = useGetVipRestaurantsQuery();
 
@@ -20,9 +22,13 @@ const VipRestaurants: React.FC = () => {
     company: "Acme Corp",
   };
 
+  console.log(vipRestaurants);
+
   return (
     <div style={{ padding: 16, maxWidth: 960, margin: "0 auto" }}>
-      <h2 style={{ textAlign: "center", marginBottom: 24 }}>VIP Restaurants</h2>
+      <h2 style={{ textAlign: "center", marginBottom: 24 }}>
+        {t("VIP Restaurants")}
+      </h2>
 
       {vipRestaurants.map((r: VipRestaurant) => (
         <div
@@ -69,7 +75,7 @@ const VipRestaurants: React.FC = () => {
                 textShadow: "0 2px 4px rgba(0,0,0,0.5)",
               }}
             >
-              Cross
+              {r.restaurantName}
             </h3>
             <p
               style={{
@@ -80,7 +86,9 @@ const VipRestaurants: React.FC = () => {
                 textShadow: "0 2px 4px rgba(0,0,0,0.5)",
               }}
             >
-              {r.discount}% Off for VIP Members
+              {t("discountMessage", {
+                discount: r.generalDiscount ?? r.levelDiscount,
+              })}
             </p>
           </div>
         </div>
@@ -107,7 +115,7 @@ const VipRestaurants: React.FC = () => {
         }}
         onClick={() => setShowVipCard(true)}
       >
-        Pokazi VIP karticu
+        {t("Show VIP card")}
       </button>
 
       {showVipCard && (
@@ -152,7 +160,7 @@ const VipRestaurants: React.FC = () => {
                 letterSpacing: 1,
               }}
             >
-              VIP CARD
+              {t("VIP CARD")}
             </h2>
 
             {/* Content Section */}
@@ -221,7 +229,7 @@ const VipRestaurants: React.FC = () => {
                 color: "#333",
                 cursor: "pointer",
               }}
-              aria-label="Close"
+              aria-label={t("Close")}
             >
               &times;
             </button>

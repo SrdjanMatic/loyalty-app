@@ -1,5 +1,6 @@
 import React from "react";
 import { FaStar, FaMedal, FaRegSmileBeam } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const primaryColor = "#bfa16b";
 const accentColor = "#fff";
@@ -10,9 +11,12 @@ interface CelebrationModalProps {
   onOk: () => void;
 }
 
-const getLevelText = (level: CelebrationModalProps["level"]) => {
-  if (level === "PROMOTED_TO_PREMIUM") return "PREMIUM";
-  if (level === "PROMOTED_TO_VIP") return "VIP";
+const getLevelText = (
+  level: CelebrationModalProps["level"],
+  t: (key: string) => string
+) => {
+  if (level === "PROMOTED_TO_PREMIUM") return t("PREMIUM");
+  if (level === "PROMOTED_TO_VIP") return t("VIP");
   return "";
 };
 
@@ -25,6 +29,8 @@ const getCelebrationIcon = (level: CelebrationModalProps["level"]) => {
 };
 
 const CelebrationModal: React.FC<CelebrationModalProps> = ({ level, onOk }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       style={{
@@ -98,7 +104,7 @@ const CelebrationModal: React.FC<CelebrationModalProps> = ({ level, onOk }) => {
             letterSpacing: 1,
           }}
         >
-          Čestitamo!
+          {t("Congratulations!")}
         </h2>
         <div
           style={{
@@ -108,9 +114,9 @@ const CelebrationModal: React.FC<CelebrationModalProps> = ({ level, onOk }) => {
             marginBottom: 18,
           }}
         >
-          Postali ste{" "}
-          <span style={{ color: primaryColor }}>{getLevelText(level)}</span>{" "}
-          član!
+          {t("You have become a")}{" "}
+          <span style={{ color: primaryColor }}>{getLevelText(level, t)}</span>{" "}
+          {t("member!")}
         </div>
         <div
           style={{
@@ -120,7 +126,7 @@ const CelebrationModal: React.FC<CelebrationModalProps> = ({ level, onOk }) => {
             fontWeight: 500,
           }}
         >
-          Uživajte u novim pogodnostima i ekskluzivnim kuponima.
+          {t("Enjoy your new benefits and exclusive coupons.")}
         </div>
         <button
           style={{
